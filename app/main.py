@@ -1,8 +1,9 @@
 class Animal:
-    alive: list = []
+    alive: list[Animal] = []
 
     def __init__(
-            self, name: str,
+            self,
+            name: str,
             health: int = 100,
             hidden: bool = False
     ) -> None:
@@ -18,6 +19,9 @@ class Animal:
             f"Hidden: {self.hidden}}}"
         )
 
+    def died(self) -> None:
+        Animal.alive.remove(self)
+
 
 class Herbivore(Animal):
     def hide(self) -> None:
@@ -26,13 +30,9 @@ class Herbivore(Animal):
 
 class Carnivore(Animal):
     @staticmethod
-    def bite(target: Herbivore) -> None:
-        if not isinstance(target, Herbivore) or target.hidden:
+    def bite(other: "Herbivore") -> None:
+        if other.hidden or isinstance(other, Carnivore):
             return
-
-        target.health -= 50
-
-        if target.health <= 0:
-            target.health = 0
-            if target in Animal.alive:
-                Animal.alive.remove(target)
+        other.health -= 50
+        if other.health <= 0:
+            other.died()
