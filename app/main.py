@@ -25,7 +25,8 @@ class Herbivore(Animal):
 
 
 class Carnivore(Animal):
-    def bite(self, target: Herbivore) -> None:
+    @staticmethod
+    def bite(target: Herbivore) -> None:
         if not isinstance(target, Herbivore) or target.hidden:
             return
 
